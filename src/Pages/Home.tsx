@@ -1,5 +1,6 @@
 import styles from '../styles/home.module.css';
 import profile from '../assets/profile.jpg';
+import projectBrightness from '../assets/brightnessController.jpg'
 
 const expertise = [
   'Distributed Systems',
@@ -14,8 +15,38 @@ type ExperienceProps = {
   description: string;
 }
 
-const allExperiences: Record<string, ExperienceProps> ={
-  
+type ProjectProps = {
+  previewImage: string;
+  link: string;
+  title: string;
+  description: string;
+  stack: string[];
+}
+
+function ProjectsDetail(projectProps: ProjectProps) {
+  return (
+    <a className={styles.projectCard} href={projectProps.link || undefined}>
+      <div className={styles.projectPreview}>
+        {projectProps.previewImage ? (
+          <img src={projectProps.previewImage} alt={`${projectProps.title} preview`} loading="lazy" />
+        ) : (
+          <span className={styles.projectPlaceholder}>Add project preview</span>
+        )}
+      </div>
+      <div className={styles.projectContent}>
+        <div className={styles.projectHeading}>
+          <h2 className={styles.projectTitle}>{projectProps.title}</h2>
+          {projectProps.link && <span className={styles.projectArrow} aria-hidden="true">↗</span>}
+        </div>
+        <p className={styles.projectDescription}>{projectProps.description}</p>
+        <ul className={styles.projectStack} aria-label="Technology stack">
+          {projectProps.stack.map((technology) => (
+            <li key={technology}>{technology}</li>
+          ))}
+        </ul>
+      </div>
+    </a>
+  );
 }
 
 function ExperiencesDetail (experienceProps:ExperienceProps) {
@@ -32,6 +63,16 @@ function ExperiencesDetail (experienceProps:ExperienceProps) {
 }
 
 export default function Home() {
+
+const allProjects: Record<string, ProjectProps> = {
+  project1: {
+    previewImage: projectBrightness,
+    link: 'https://github.com/Amdadul-coding/monitor-brightness-controller',
+    title: 'Brightness Controller',
+    description: 'Built an app for controlling external monitor brightness to automate daily brightness schedules, this saves me from fiddling with monitor buttons and making brigntess adjustments easier',
+    stack: ['React', 'TypeScript', 'Python'],
+  },
+};
 
 const allExperiences: Record<string, ExperienceProps> ={
   'exp1': {
@@ -53,8 +94,15 @@ const allExperiences: Record<string, ExperienceProps> ={
       <section className={styles.introduction}>
         <img src={profile} alt="myPortrait" />
         <div className={styles.aboutMe}>
-          <h1 className={styles.title}>
-            Amdadul Haque
+          <h1
+            className={styles.title}
+            tabIndex={0}
+            aria-label="Amdadul Haque — Software Engineer"
+          >
+            <span className={styles.titleFlip} aria-hidden="true">
+              <span className={styles.titleFront}>Amdadul Haque</span>
+              <span className={styles.titleBack}>Software Engineer</span>
+            </span>
           </h1>
           <p className={styles.summary}>
             I am a software engineer with 2+ years of experience developing and delivering cross-platform applications, distributed backend systems, and
@@ -94,8 +142,17 @@ const allExperiences: Record<string, ExperienceProps> ={
         <h1>
           Projects
         </h1>
-        <div>
-
+        <div className={styles.allProjects}>
+          {Object.entries(allProjects).map(([id, item]) => (
+            <ProjectsDetail
+              key={id}
+              previewImage={item.previewImage}
+              link={item.link}
+              title={item.title}
+              description={item.description}
+              stack={item.stack}
+            />
+          ))}
         </div>
       </section>
     </>

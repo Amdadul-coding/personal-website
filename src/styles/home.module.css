@@ -23,63 +23,100 @@ body{
     min-width: 0;
     display: flex;
     flex-direction: column;
+    gap: 1rem;
     flex: 1;
 }
 .expertiseCarousel {
     overflow: hidden;
     width: 100%;
-    margin: 1.25rem 0;
+    padding: 1rem 0;
     font-size: 20px;
     font-family: 'Courier New', Courier, monospace;
     font-weight: 500;
 }
-
 .expertiseTrack {
     display: flex;
 }
-
 .expertiseList {
     display: flex;
     flex: 0 0 auto;
     min-width: 100%;
     align-items: center;
     justify-content: space-around;
-    gap: 2rem;
+    gap: 1.5rem;
     margin: 0;
-    padding: 0 2rem 0 0;
     list-style: none;
     white-space: nowrap;
     animation: slideExpertise 30s linear infinite;
 }
-
 .expertiseCarousel:hover .expertiseList {
     animation-play-state: paused;
 }
-
+.expertiseList li {
+    padding: .65rem 1.25rem;
+    border: 2px solid #b0d6df;
+    border-radius: 999px;
+    background: #83d7ee;
+    color: #173d48;
+    line-height: 1.4;
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.expertiseList li:hover {
+    transform: translateY(-4px);
+    border-color: #79b4c4;
+    box-shadow: 0 5px 12px rgb(23 61 72 / 18%);
+}
 @keyframes slideExpertise {
     from { transform: translateX(0); }
     to { transform: translateX(-100%); }
 }
-
-@media (prefers-reduced-motion: reduce) {
-    .expertiseList {
-        animation: none;
-        flex: 1;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        white-space: normal;
-        padding: 0;
-    }
-
-    .expertiseList[aria-hidden='true'] {
-        display: none;
-    }
-}
 .aboutMe h1 {
-    font-size: 40px;
+    font-size: clamp(2.75rem, 4.5vw, 4.5rem);
     margin: 0;
-    font-family: Monaco, monospace;
-    font-weight: 1000;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 500;
+    font-style: italic;
+    letter-spacing: -.045em;
+    line-height: 1.15;
+    color: #173d48;
+}
+.title {
+    width: fit-content;
+    max-width: 100%;
+    perspective: 1000px;
+    cursor: default;
+}
+.titleFront {
+    text-decoration: underline;
+    text-decoration-color: #83d7ee;
+    text-decoration-thickness: 5px;
+    text-underline-offset: .15em;
+    text-decoration-skip-ink: none;
+}
+.titleFlip {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    transform-style: preserve-3d;
+    transition: transform 650ms cubic-bezier(.4, 0, .2, 1);
+}
+.titleFront,
+.titleBack {
+    grid-area: 1 / 1;
+    align-self: center;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+.titleBack {
+    transform: rotateY(180deg);
+}
+.title:hover .titleFlip,
+.title:focus .titleFlip {
+    transform: rotateY(180deg);
+}
+.title:focus-visible {
+    outline: 2px solid #246c80;
+    outline-offset: 6px;
+    border-radius: .25rem;
 }
 .aboutMe p {
     font-size: 20px;
@@ -120,10 +157,150 @@ body{
 .projects {
     display: flex;
     flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 5rem;
 }
 .projects h1 {
     font-family: Monaco, monospace;
     margin: 0;
     font-size: 40px;
-    gap: 2rem
+}
+.allProjects {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+}
+.projectCard {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #a1cbd5;
+    border-radius: 1.25rem;
+    background: #f5fcfe;
+    color: #173d48;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgb(23 61 72 / 5%);
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.projectCard[href]:hover {
+    transform: translateY(-5px);
+    border-color: #397f92;
+    box-shadow: 0 12px 28px rgb(23 61 72 / 12%);
+}
+.projectCard:focus-visible {
+    outline: 3px solid #246c80;
+    outline-offset: 4px;
+}
+.projectPreview {
+    display: flex;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #beedf9;
+    border-bottom: 1px solid #a1cbd5;
+}
+.projectPreview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.projectPlaceholder {
+    border: 1px dashed #679ca9;
+    border-radius: .75rem;
+    color: #356777;
+    font: .875rem Monaco, monospace;
+    text-align: center;
+}
+.projectContent {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    overflow-wrap: anywhere;
+}
+.projectHeading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+.projectTitle {
+    margin: 0;
+    font: 700 1.25rem / 1.4 Monaco, monospace;
+}
+.projectArrow {
+    flex-shrink: 0;
+    color: #397f92;
+    font-size: 1.5rem;
+}
+.projectDescription {
+    margin: 0;
+    color: #46616a;
+    font: 1rem / 1.65 'Courier New', Courier, monospace;
+}
+.projectStack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin: auto 0 0;
+    padding: .5rem 0 0;
+    list-style: none;
+}
+.projectStack li {
+    padding: .35rem .7rem;
+    border: 1px solid #b0d6df;
+    border-radius: 999px;
+    background: #e4f3f7;
+    font: .8rem / 1.4 'Courier New', Courier, monospace;
+}
+@media (max-width: 1100px) {
+    body {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+    .introduction {
+        gap: 3rem;
+    }
+}
+@media (max-width: 640px) {
+    body {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+    .introduction {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .allProjects {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.5rem;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .projectCard {
+        transition: none;
+    }
+    .projectCard[href]:hover {
+        transform: none;
+    }
+    .titleFlip {
+        transition: none;
+    }
+        .expertiseList li {
+        transition: none;
+    }
+    .expertiseList li:hover {
+        transform: none;
+    }
+    .expertiseList {
+        animation: none;
+        flex: 1;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        white-space: normal;
+        padding: 0;
+    }
+    .expertiseList[aria-hidden='true'] {
+        display: none;
+    }
 }
