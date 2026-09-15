@@ -11,13 +11,57 @@ body{
     justify-content: center;
     align-items: center;
 }
-.introduction img {
+.profileColumn {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    width: 200px;
+}
+.portrait {
     max-width: 200px;
     max-height: 290px;
     min-width: 200px;
-    flex: 1;
     border-radius: 2rem;
     background-color: #9fe1f5;
+}
+.socials {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+}
+.socialButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 56px;
+    width: 56px;
+    height: 56px;
+    overflow: hidden;
+    border: 2px solid #b0d6df;
+    border-radius: 50%;
+    background: #83d7ee;
+    color: #173d48;
+    text-decoration: none;
+    font: 700 1.25rem / 1 Monaco, monospace;
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.socialButton img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+.socialButton:hover {
+    transform: translateY(-4px);
+    border-color: #397f92;
+    box-shadow: 0 5px 12px rgb(23 61 72 / 18%);
+}
+.socialButton:focus-visible {
+    outline: 3px solid #246c80;
+    outline-offset: 4px;
 }
 .aboutMe {
     min-width: 0;
@@ -154,13 +198,15 @@ body{
     flex-direction: column;
     gap: 2.5rem;
 }
-.projects {
+.projects,
+.resume {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     padding-bottom: 5rem;
 }
-.projects h1 {
+.projects h1,
+.resume h1 {
     font-family: Monaco, monospace;
     margin: 0;
     font-size: 40px;
@@ -169,6 +215,16 @@ body{
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2rem;
+}
+.resumeCard {
+    max-width: 50%;
+}
+.resumePreview {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #a1cbd5;
+    background: #fff;
 }
 .projectCard {
     display: flex;
@@ -275,8 +331,17 @@ body{
         grid-template-columns: minmax(0, 1fr);
         gap: 1.5rem;
     }
+    .resumeCard {
+        max-width: 100%;
+    }
 }
 @media (prefers-reduced-motion: reduce) {
+    .socialButton {
+        transition: none;
+    }
+    .socialButton:hover {
+        transform: none;
+    }
     .projectCard {
         transition: none;
     }

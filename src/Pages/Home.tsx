@@ -1,6 +1,8 @@
 import styles from '../styles/home.module.css';
 import profile from '../assets/profile.jpg';
 import projectBrightness from '../assets/brightnessController.jpg'
+import resume from '../assets/resume.pdf';
+import resumePreview from '../assets/resume-preview.png';
 
 const expertise = [
   'Distributed Systems',
@@ -15,12 +17,34 @@ type ExperienceProps = {
   description: string;
 }
 
+type SocialProps = {
+  name: string;
+  link: string;
+  logo: string;
+  placeholder: string;
+}
+
 type ProjectProps = {
   previewImage: string;
   link: string;
   title: string;
   description: string;
   stack: string[];
+}
+
+function SocialDetail({ name, link, logo, placeholder }: SocialProps) {
+  return (
+    <a
+      className={styles.socialButton}
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${name} (opens in a new tab)`}
+      title={name}
+    >
+      {logo ? <img src={logo} alt="" /> : <span aria-hidden="true">{placeholder}</span>}
+    </a>
+  );
 }
 
 function ProjectsDetail(projectProps: ProjectProps) {
@@ -64,35 +88,57 @@ function ExperiencesDetail (experienceProps:ExperienceProps) {
 
 export default function Home() {
 
-const allProjects: Record<string, ProjectProps> = {
-  project1: {
-    previewImage: projectBrightness,
-    link: 'https://github.com/Amdadul-coding/monitor-brightness-controller',
-    title: 'Brightness Controller',
-    description: 'Built an app for controlling external monitor brightness to automate daily brightness schedules, this saves me from fiddling with monitor buttons and making brigntess adjustments easier',
-    stack: ['React', 'TypeScript', 'Python'],
-  },
-};
+  const allSocials: Record<string, SocialProps> = {
+    linkedin: {
+      name: 'LinkedIn',
+      link: 'https://www.linkedin.com/in/amdadul-haque-837b37308/',
+      logo: '',
+      placeholder: 'in',
+    },
+    github: {
+      name: 'GitHub',
+      link: 'https://github.com/Amdadul-coding',
+      logo: '',
+      placeholder: 'GH',
+    },
+  };
 
-const allExperiences: Record<string, ExperienceProps> ={
-  'exp1': {
-    title: 'Software Engineer @ Link',
-    description: 'I build and ship full-stack software across distributed backend systems, real-time applications, and production integrations. My work spans Go services, React and TypeScript interfaces, Python-based BACnet automation, JWT authentication, NATS messaging, observability, and customer-facing web platforms. I focus on building reliable systems that connect applications, backend services, and external devices while improving security, debugging, and real-time user experiences.'
-  },
-  'exp2': {
-    title: 'Full-Stack Engineer @ MyMicrojourney',
-    description: 'Built backend services with NestJS and MongoDB to support frontend application workflows, including REST APIs, data validation and persistence, secure routing, and CORS configuration.'
-  },
-  'exp3': {
-    title: 'Full-Stack Developer @Bad Kids Korporation',
-    description: 'Led a cross-functional team building responsive web applications with HTML, CSS, and JavaScript, focusing on usability, debugging, and polished user experiences across devices.'
+  const allProjects: Record<string, ProjectProps> = {
+    project1: {
+      previewImage: projectBrightness,
+      link: 'https://github.com/Amdadul-coding/monitor-brightness-controller',
+      title: 'Brightness Controller',
+      description: 'Built an app for controlling external monitor brightness to automate daily brightness schedules, this saves me from fiddling with monitor buttons and making brigntess adjustments easier',
+      stack: ['React', 'TypeScript', 'Python'],
+    },
+  };
+
+  const allExperiences: Record<string, ExperienceProps> ={
+    'exp1': {
+      title: 'Software Engineer @ Link',
+      description: 'I build and ship full-stack software across distributed backend systems, real-time applications, and production integrations. My work spans Go services, React and TypeScript interfaces, Python-based BACnet automation, JWT authentication, NATS messaging, observability, and customer-facing web platforms. I focus on building reliable systems that connect applications, backend services, and external devices while improving security, debugging, and real-time user experiences.'
+    },
+    'exp2': {
+      title: 'Full-Stack Engineer @ MyMicrojourney',
+      description: 'Built backend services with NestJS and MongoDB to support frontend application workflows, including REST APIs, data validation and persistence, secure routing, and CORS configuration.'
+    },
+    'exp3': {
+      title: 'Full-Stack Developer @Bad Kids Korporation',
+      description: 'Led a cross-functional team building responsive web applications with HTML, CSS, and JavaScript, focusing on usability, debugging, and polished user experiences across devices.'
+    }
   }
-}
   
   return(
     <>
       <section className={styles.introduction}>
-        <img src={profile} alt="myPortrait" />
+        <div className={styles.profileColumn}>
+          <img className={styles.portrait} src={profile} alt="myPortrait" />
+          <nav className={styles.socials} aria-label="Social media">
+            {Object.entries(allSocials).map(([id, social]) => (
+              <SocialDetail key={id} {...social} />
+            ))}
+          </nav>
+        </div>
         <div className={styles.aboutMe}>
           <h1
             className={styles.title}
@@ -154,6 +200,30 @@ const allExperiences: Record<string, ExperienceProps> ={
             />
           ))}
         </div>
+      </section>
+      <section className={styles.resume} aria-labelledby="resume-heading">
+        <h1 id="resume-heading">Resume</h1>
+        <a
+          className={`${styles.projectCard} ${styles.resumeCard}`}
+          href={resume}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="View Amdadul Haque’s full resume (PDF, opens in a new tab)"
+        >
+          <img
+            className={styles.resumePreview}
+            src={resumePreview}
+            alt="Preview of the first page of Amdadul Haque’s resume"
+            loading="lazy"
+          />
+          <div className={styles.projectContent}>
+            <div className={styles.projectHeading}>
+              <h2 className={styles.projectTitle}>View full resume</h2>
+              <span className={styles.projectArrow} aria-hidden="true">↗</span>
+            </div>
+            <p className={styles.projectDescription}>PDF · Opens in a new tab</p>
+          </div>
+        </a>
       </section>
     </>
   );
