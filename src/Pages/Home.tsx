@@ -3,6 +3,7 @@ import profile from '../assets/profile.jpg';
 import projectBrightness from '../assets/brightnessController.jpg'
 import resume from '../assets/resume.pdf';
 import resumePreview from '../assets/resume-preview.png';
+import ContactWidget from '../Components/ContactWidget';
 
 const expertise = [
   'Distributed Systems',
@@ -116,7 +117,7 @@ export default function Home() {
   const allExperiences: Record<string, ExperienceProps> ={
     'exp1': {
       title: 'Software Engineer @ Link',
-      description: 'I build and ship full-stack software across distributed backend systems, real-time applications, and production integrations. My work spans Go services, React and TypeScript interfaces, Python-based BACnet automation, JWT authentication, NATS messaging, observability, and customer-facing web platforms. I focus on building reliable systems that connect applications, backend services, and external devices while improving security, debugging, and real-time user experiences.'
+      description: 'Build and ship full-stack software across distributed backend systems, real-time applications, and production integrations. Expertise spans Go services, React and TypeScript interfaces, Python-based BACnet automation, JWT authentication, NATS messaging, observability, and customer-facing web platforms. Specialize in building reliable systems that connect applications, backend services, and external devices while improving security, debugging, and real-time user experiences.'
     },
     'exp2': {
       title: 'Full-Stack Engineer @ MyMicrojourney',
@@ -151,8 +152,8 @@ export default function Home() {
             </span>
           </h1>
           <p className={styles.summary}>
-            I am a software engineer with 2+ years of experience developing and delivering cross-platform applications, distributed backend systems, and
-            full stack website using languages/tools such as Go, Python, Typescript, and React. My experience includes designing event-driven integrations,
+            Software engineer with 2+ years of experience developing and delivering cross-platform applications, distributed backend systems, and
+            full-stack websites using languages and tools such as Go, Python, TypeScript, CSS, and React. Experience encompasses event-driven architectures,
             secure backend services, real-time communication workflows, and responsive user interfaces.
           </p>
           <div className={styles.expertiseCarousel}>
@@ -225,6 +226,7 @@ export default function Home() {
           </div>
         </a>
       </section>
+      <ContactWidget />
     </>
   );
 }
