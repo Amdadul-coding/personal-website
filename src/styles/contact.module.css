@@ -113,6 +113,44 @@
 }
 .send {
     border-radius: .75rem;
+    transition: background-color 240ms ease, border-color 240ms ease, color 240ms ease;
+}
+.send[data-sent='true'],
+.send[data-sent='true']:hover {
+    background: #15803d;
+    border-color: #166534;
+    color: #fff;
+}
+.buttonLabel {
+    display: inline-block;
+    animation: revealContactContent 180ms ease-out both;
+}
+.successExit {
+    animation: dismissSuccess 240ms ease-in both;
+}
+@keyframes dismissSuccess {
+    to { opacity: 0; transform: translateY(-4px); }
+}
+.error {
+    margin: 0 0 .5rem;
+    color: #b42318;
+    font-size: .875rem;
+}
+.feedback {
+    margin: 0 0 .5rem;
+    color: #173d48;
+    font-size: .875rem;
+}
+.form [aria-invalid='true'] {
+    border-color: #b42318;
+}
+.send:disabled {
+    opacity: .65;
+    cursor: wait;
+}
+.send[data-sent='true']:disabled {
+    opacity: 1;
+    cursor: default;
 }
 .trigger:hover,
 .send:hover,
@@ -127,7 +165,10 @@
 }
 @media (prefers-reduced-motion: reduce) {
     .panel,
-    .panel > * {
+    .panel > *,
+    .buttonLabel,
+    .successExit {
         animation: none;
     }
+    .send { transition: none; }
 }

@@ -49,10 +49,14 @@ body{
     font: 700 1.25rem / 1 Monaco, monospace;
     transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
+.socialButton:has(img) {
+    border: 0;
+}
 .socialButton img {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 .socialButton:hover {
     transform: translateY(-4px);

@@ -1,5 +1,7 @@
 import styles from '../styles/home.module.css';
 import profile from '../assets/profile.jpg';
+import githubLogo from '../assets/github.png';
+import linkedinLogo from '../assets/linkedin.png';
 import projectBrightness from '../assets/brightnessController.jpg'
 import resume from '../assets/resume.pdf';
 import resumePreview from '../assets/resume-preview.png';
@@ -93,13 +95,13 @@ export default function Home() {
     linkedin: {
       name: 'LinkedIn',
       link: 'https://www.linkedin.com/in/amdadul-haque-837b37308/',
-      logo: '',
+      logo: linkedinLogo,
       placeholder: 'in',
     },
     github: {
       name: 'GitHub',
       link: 'https://github.com/Amdadul-coding',
-      logo: '',
+      logo: githubLogo,
       placeholder: 'GH',
     },
   };
