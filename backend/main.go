@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"log"
@@ -69,7 +70,7 @@ func reply(w http.ResponseWriter, status int, message string, errors map[string]
 	_ = json.NewEncoder(w).Encode(response{message, errors})
 }
 
-func contactHandler() http.Handler {
+func contactHandler(send func(context.Context, submission) error) http.Handler {
 	l := &limiter{visitors: make(map[string]visitor)}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -122,18 +123,40 @@ func contactHandler() http.Handler {
 			reply(w, 429, "Too many submissions.", nil)
 			return
 		}
-		reply(w, 200, "Message Received", nil)
+		if err := send(r.Context(), input); err != nil {
+			log.Printf("Contact email failed: %v", err)
+			reply(w, 502, "Unable to send your message right now. Please try again later.", nil)
+			return
+		}
+		reply(w, 200, "Message sent", nil)
 	})
 }
 
 func main() {
+	if err := loadEnvironment(".env"); err != nil {
+		log.Fatal(err)
+	}
+	sender, err := emailSenderFromEnv()
+	if err != nil {
+		log.Fatal(err)
+	}
 	mux := http.NewServeMux()
-	mux.Handle("/api/contact", contactHandler())
+	mux.Handle("/api/contact", contactHandler(sender.send))
+	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+	if dir := os.Getenv("STATIC_DIR"); dir != "" {
+		mux.Handle("/", websiteHandler(dir))
+	}
 	addr := os.Getenv("CONTACT_ADDR")
 	if addr == "" {
-		addr = "127.0.0.1:8080"
+		if port := os.Getenv("PORT"); port != "" {
+			addr = ":" + port
+		} else {
+			addr = "127.0.0.1:8080"
+		}
 	}
-	server := &http.Server{Addr: addr, Handler: mux, ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 10 * time.Second, WriteTimeout: 10 * time.Second, IdleTimeout: 60 * time.Second}
+	server := &http.Server{Addr: addr, Handler: mux, ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 10 * time.Second, WriteTimeout: 20 * time.Second, IdleTimeout: 60 * time.Second}
 	log.Printf("Contact API listening on %s", addr)
 	log.Fatal(server.ListenAndServe())
 }

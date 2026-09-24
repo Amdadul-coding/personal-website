@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -36,7 +37,7 @@ func TestValidation(t *testing.T) {
 		{"oversized", `{"message":"` + strings.Repeat("a", 17000) + `"}`, 400, 0},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			w := submit(contactHandler(), tc.body, "192.0.2.1")
+			w := submit(contactHandler(func(context.Context, submission) error { return nil }), tc.body, "192.0.2.1")
 			if w.Code != tc.status {
 				t.Fatalf("status %d: %s", w.Code, w.Body.String())
 			}
@@ -52,7 +53,7 @@ func TestValidation(t *testing.T) {
 }
 
 func TestRateLimit(t *testing.T) {
-	handler := contactHandler()
+	handler := contactHandler(func(context.Context, submission) error { return nil })
 	const valid = `{"name":"Ada","email":"ada@example.com","message":"Hello"}`
 	// Invalid requests must not consume any of the five successful submissions.
 	for i := 0; i < rateLimit+2; i++ {
@@ -102,7 +103,7 @@ func TestMethodAndContentType(t *testing.T) {
 		status int
 	}{{"GET", 405}, {"POST", 415}} {
 		w := httptest.NewRecorder()
-		contactHandler().ServeHTTP(w, httptest.NewRequest(tc.method, "/api/contact", nil))
+		contactHandler(func(context.Context, submission) error { return nil }).ServeHTTP(w, httptest.NewRequest(tc.method, "/api/contact", nil))
 		if w.Code != tc.status {
 			t.Fatalf("%s: %d", tc.method, w.Code)
 		}

@@ -3,6 +3,7 @@ import profile from '../assets/profile.jpg';
 import githubLogo from '../assets/github.png';
 import linkedinLogo from '../assets/linkedin.png';
 import projectBrightness from '../assets/brightnessController.jpg'
+import projectFitness from '../assets/everything-fitness-preview.png';
 import resume from '../assets/resume.pdf';
 import resumePreview from '../assets/resume-preview.png';
 import ContactWidget from '../Components/ContactWidget';
@@ -30,6 +31,7 @@ type SocialProps = {
 type ProjectProps = {
   previewImage: string;
   link: string;
+  openInNewTab?: boolean;
   title: string;
   description: string;
   stack: string[];
@@ -52,7 +54,13 @@ function SocialDetail({ name, link, logo, placeholder }: SocialProps) {
 
 function ProjectsDetail(projectProps: ProjectProps) {
   return (
-    <a className={styles.projectCard} href={projectProps.link || undefined}>
+    <a
+      className={styles.projectCard}
+      href={projectProps.link || undefined}
+      target={projectProps.openInNewTab ? '_blank' : undefined}
+      rel={projectProps.openInNewTab ? 'noopener noreferrer' : undefined}
+      aria-label={projectProps.openInNewTab ? `${projectProps.title} (opens in a new tab)` : undefined}
+    >
       <div className={styles.projectPreview}>
         {projectProps.previewImage ? (
           <img src={projectProps.previewImage} alt={`${projectProps.title} preview`} loading="lazy" />
@@ -107,6 +115,14 @@ export default function Home() {
   };
 
   const allProjects: Record<string, ProjectProps> = {
+    everythingFitness: {
+      previewImage: projectFitness,
+      link: 'https://everythingfitness.onrender.com/',
+      openInNewTab: true,
+      title: 'Everything Fitness',
+      description: 'Built a full-stack fitness app that helps users find exercises by muscle group and workout location, with animated previews and step-by-step guides. A Go REST API filters an embedded JSON exercise catalog, with automated deployments on Render.',
+      stack: ['React', 'TypeScript', 'Go'],
+    },
     project1: {
       previewImage: projectBrightness,
       link: 'https://github.com/Amdadul-coding/monitor-brightness-controller',
@@ -197,6 +213,7 @@ export default function Home() {
               key={id}
               previewImage={item.previewImage}
               link={item.link}
+              openInNewTab={item.openInNewTab}
               title={item.title}
               description={item.description}
               stack={item.stack}
