@@ -3,6 +3,7 @@ import styles from '../styles/contact.module.css';
 
 export default function ContactWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -14,6 +15,7 @@ export default function ContactWidget() {
   const [sent, setSent] = useState(false);
   const [successExiting, setSuccessExiting] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const restoreFocusRef = useRef(false);
 
@@ -47,10 +49,15 @@ export default function ContactWidget() {
   return (
     <div
       className={styles.widget}
+      data-menu-open={isMenuOpen}
       onKeyDown={(event) => {
         if (isOpen && event.key === 'Escape') {
           event.preventDefault();
           closePanel();
+        } else if (isMenuOpen && event.key === 'Escape') {
+          event.preventDefault();
+          setIsMenuOpen(false);
+          menuButtonRef.current?.focus();
         }
       }}
     >
@@ -170,6 +177,7 @@ export default function ContactWidget() {
         </section>
       )}
       {!isOpen && <button
+        id="contact-action"
         ref={buttonRef}
         className={styles.trigger}
         type="button"
@@ -179,6 +187,19 @@ export default function ContactWidget() {
         onClick={() => setIsOpen(true)}
       >
         Contact me
+      </button>}
+      {!isOpen && <button
+        ref={menuButtonRef}
+        className={styles.mobileToggle}
+        type="button"
+        aria-label={isMenuOpen ? 'Close contact menu' : 'Open contact menu'}
+        aria-expanded={isMenuOpen}
+        aria-controls="contact-action"
+        onClick={() => setIsMenuOpen((open) => !open)}
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+          {isMenuOpen ? <path d="m6 6 12 12M6 18 18 6" /> : <path d="M4 6h16M4 12h16M4 18h16" />}
+        </svg>
       </button>}
     </div>
   );

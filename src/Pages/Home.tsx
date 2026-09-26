@@ -2,6 +2,7 @@ import styles from '../styles/home.module.css';
 import profile from '../assets/profile.jpg';
 import githubLogo from '../assets/github.png';
 import linkedinLogo from '../assets/linkedin.png';
+import emailLogo from '../assets/email.png';
 import projectBrightness from '../assets/brightnessController.jpg'
 import projectFitness from '../assets/everything-fitness-preview.png';
 import resume from '../assets/resume.pdf';
@@ -38,13 +39,15 @@ type ProjectProps = {
 }
 
 function SocialDetail({ name, link, logo, placeholder }: SocialProps) {
+  const isEmail = link.startsWith('mailto:');
+
   return (
     <a
       className={styles.socialButton}
       href={link}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={`${name} (opens in a new tab)`}
+      target={isEmail ? undefined : '_blank'}
+      rel={isEmail ? undefined : 'noopener noreferrer'}
+      aria-label={isEmail ? 'Email Amdadul Haque (opens your mail app)' : `${name} (opens in a new tab)`}
       title={name}
     >
       {logo ? <img src={logo} alt="" /> : <span aria-hidden="true">{placeholder}</span>}
@@ -112,6 +115,12 @@ export default function Home() {
       logo: githubLogo,
       placeholder: 'GH',
     },
+    email: {
+      name: 'Email',
+      link: 'mailto:amdadul1123@gmail.com',
+      logo: emailLogo,
+      placeholder: '@',
+    },
   };
 
   const allProjects: Record<string, ProjectProps> = {
@@ -152,7 +161,7 @@ export default function Home() {
       <section className={styles.introduction}>
         <div className={styles.profileColumn}>
           <img className={styles.portrait} src={profile} alt="myPortrait" />
-          <nav className={styles.socials} aria-label="Social media">
+          <nav className={styles.socials} aria-label="Social and contact links">
             {Object.entries(allSocials).map(([id, social]) => (
               <SocialDetail key={id} {...social} />
             ))}

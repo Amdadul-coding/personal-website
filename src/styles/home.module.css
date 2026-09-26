@@ -328,8 +328,32 @@ body{
         padding-right: 1.25rem;
     }
     .introduction {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+    }
+    .aboutMe {
+        display: contents;
+    }
+    .title {
+        grid-row: 1;
+    }
+    .profileColumn {
+        grid-row: 2;
+        flex-direction: row;
+        gap: 1rem;
+        width: 100%;
+    }
+    .portrait {
+        width: min(45vw, 200px);
+        min-width: 0;
+        height: auto;
+    }
+    .socials {
         flex-direction: column;
-        align-items: flex-start;
+        width: auto;
+        gap: .5rem;
+        flex-wrap: nowrap;
     }
     .allProjects {
         grid-template-columns: minmax(0, 1fr);
