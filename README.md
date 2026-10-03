@@ -59,7 +59,42 @@ go run .
 Run `npm run dev` in another terminal from the repository root. Vite proxies
 `/api` to Go at `127.0.0.1:8080`. Configured submissions send real email.
 
-### Deploy as one service
+### Deploy on Cloudflare Pages (free)
+
+The `functions/api/contact.ts` Pages Function replaces Go on Cloudflare and
+serves the same `/api/contact` endpoint. The React form needs no changes.
+The Go backend remains available for local development and Docker hosting.
+
+1. Push this repository to GitHub.
+2. In Cloudflare, open **Workers & Pages**, choose the **Pages** Git import
+   workflow, and connect this repository with production branch `main`.
+3. Use build command `npm run build`, output directory `dist`, and the repository
+   root as the root directory. Do not select Docker.
+4. In the Pages project's **Settings → Variables and Secrets**, add
+   `RESEND_API_KEY` as a secret and `CONTACT_FROM_EMAIL` and `CONTACT_TO_EMAIL`
+   as runtime variables, using your local email settings. Use a Resend-verified
+   sender. Configure Production (and Preview separately if you want preview
+   contact forms to send real email). Never use `VITE_` for credentials.
+5. Redeploy after adding the settings. Open the provided `pages.dev` URL,
+   refresh `/about`, and test the contact form. Check Resend delivery logs.
+
+Cloudflare does not read `backend/.env`. Only the three email settings above
+are needed; `PORT`, `STATIC_DIR`, and `CONTACT_ADDR` are for Go only.
+The `public/_routes.json` file limits Function execution to API routes so normal
+page visits use static hosting. Pages supplies the SPA fallback for React Router.
+Missing email configuration returns a form error while the website stays available.
+
+The Function rejects requests over 16 KB, validates fields, and only reports
+success after Resend returns a message ID. Its five-attempts-per-ten-minutes IP
+limit is best effort per isolate, not a global limit: counters reset on eviction
+and separate isolates/locations have separate counters. No database is required.
+Provider acceptance does not guarantee inbox delivery. Cloudflare's free Function
+quota and Resend's email limits still apply.
+
+References: [Pages routing](https://developers.cloudflare.com/pages/functions/routing/),
+[runtime settings and secrets](https://developers.cloudflare.com/pages/functions/bindings/).
+
+### Deploy as one Docker service
 
 The root Dockerfile builds React and Go, then serves both from one container.
 The browser uses the same origin for the website and API, with no CORS setup.
