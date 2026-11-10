@@ -1,9 +1,87 @@
-body {
-  margin: 0;
-  padding: 0;
-  background: #EEF5F6;
+:root {
+  --bg: #050812;
+  --bg-2: #0a1020;
+  --text: #e6edf7;
+  --muted: #94a3bd;
+  --faint: #5b6b85;
+  --cyan: #22d3ee;
+  --violet: #a78bfa;
+  --pink: #f472b6;
+  --glass: rgb(255 255 255 / 5%);
+  --glass-strong: rgb(255 255 255 / 9%);
+  --glass-border: rgb(255 255 255 / 12%);
+  --glass-border-hover: rgb(125 211 252 / 45%);
+  --glow: 0 0 0 1px rgb(125 211 252 / 20%), 0 20px 60px -20px rgb(34 211 238 / 35%);
+  --font-display: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --mx: 50vw;
+  --my: 30vh;
+  color-scheme: dark;
 }
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgb(34 211 238 / 35%);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--cyan), var(--violet));
+  border-radius: 999px;
+  border: 2px solid var(--bg);
+}
+
+a {
+  color: inherit;
+}
+
+/* Scroll reveal — elements opt in with data-reveal; Home attaches the observer. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px) scale(.985);
+  transition:
+    opacity 800ms ease,
+    transform 900ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

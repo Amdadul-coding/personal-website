@@ -1,0 +1,84 @@
+.background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgb(34 211 238 / 10%), transparent 60%),
+        linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 60%);
+}
+.blob {
+    position: absolute;
+    width: 55vmax;
+    height: 55vmax;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: .5;
+    mix-blend-mode: screen;
+    will-change: transform;
+}
+.blobCyan {
+    top: -20vmax;
+    left: -10vmax;
+    background: radial-gradient(circle, rgb(34 211 238 / 55%), transparent 65%);
+    animation: driftA 26s ease-in-out infinite alternate;
+}
+.blobViolet {
+    top: 20vh;
+    right: -20vmax;
+    background: radial-gradient(circle, rgb(139 92 246 / 55%), transparent 65%);
+    animation: driftB 32s ease-in-out infinite alternate;
+}
+.blobPink {
+    bottom: -25vmax;
+    left: 25vw;
+    background: radial-gradient(circle, rgb(236 72 153 / 40%), transparent 65%);
+    animation: driftC 38s ease-in-out infinite alternate;
+}
+@keyframes driftA {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(18vw, 14vh) scale(1.15); }
+}
+@keyframes driftB {
+    from { transform: translate(0, 0) scale(1.05); }
+    to { transform: translate(-16vw, 22vh) scale(.9); }
+}
+@keyframes driftC {
+    from { transform: translate(0, 0) scale(.95); }
+    to { transform: translate(-20vw, -18vh) scale(1.1); }
+}
+.grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgb(148 163 184 / 7%) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(148 163 184 / 7%) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, #000 20%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, #000 20%, transparent 100%);
+}
+.canvas {
+    position: absolute;
+    inset: 0;
+    opacity: .9;
+}
+.spotlight {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(520px circle at var(--mx) var(--my), rgb(34 211 238 / 9%), transparent 60%);
+    transition: background 120ms linear;
+}
+.noise {
+    position: absolute;
+    inset: 0;
+    opacity: .035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (prefers-reduced-motion: reduce) {
+    .blob {
+        animation: none;
+    }
+    .spotlight {
+        display: none;
+    }
+}
